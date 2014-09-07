@@ -17,8 +17,8 @@ import android.net.NetworkInfo;
 
 public class TalkToServer {
 
-	public static final String getURL = "http://192.168.1.2/ONE/get.php";
-	public static final String postURL = "http://192.168.1.2/ONE/post.php";
+	public static final String getURL = "http://192.168.1.2/ab_server/get.php";
+	public static final String postURL = "http://192.168.1.2/ab_server/post.php";
 	
 	private Context context;
 	public TalkToServer(Context context)
@@ -39,7 +39,7 @@ public class TalkToServer {
 		String result;
 		if(checkConnectivity()==false)
 		{
-			return "No Connectivity";
+			return "Could not connect";
 		}
 		
 		try
@@ -57,8 +57,8 @@ public class TalkToServer {
 		} catch (Exception e) {
 	            //Log.d("InputStream", e.getLocalizedMessage());
 	        	result = "Could not connect";
-	        }
-			return result;
+	    }
+		return "Data sent";
 	 
 	}
 	public String getAorB()

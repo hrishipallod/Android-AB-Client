@@ -22,7 +22,6 @@ public class MainActivity extends ActionBarActivity {
         obj = new ConversionRate(this);
         try {
 			new MyAsyncTask().execute("0", obj.createJSONObject(200,1));
-			obj.delete_all_rows();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,7 +100,8 @@ public class MainActivity extends ActionBarActivity {
 
 			if(uris[0].equals("0"))
 			{
-				tObj.sendJSONdata(uris[1]);
+				if(tObj.sendJSONdata(uris[1]).equals("Data Sent"))
+					obj.delete_all_rows();
 				return "DO NOTHING";
 			}
 			else
