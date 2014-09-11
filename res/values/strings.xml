@@ -6,5 +6,8 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_resolution">Resolution</string>
     <string name="title_activity_like">Like</string>
+    <string name="hint">Hint</string>
+    <string name="play">Hint</string>
+    <string name="download">Hint</string>
 
 </resources>

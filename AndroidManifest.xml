@@ -35,6 +35,7 @@
             android:name=".Like"
             android:label="@string/title_activity_like" >
         </activity>
+        <service android:name=".Service" />
     </application>
 
 </manifest>

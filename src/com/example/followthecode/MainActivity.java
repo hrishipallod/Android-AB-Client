@@ -8,27 +8,42 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends ActionBarActivity {
 
 	ConversionRate obj;
 	TalkToServer tObj;
+	EditText t1;
+	
 	int ab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        t1 = (EditText)findViewById(R.id.editText1);
         tObj = new TalkToServer(this);
         obj = new ConversionRate(this);
+        
         try {
-			new MyAsyncTask().execute("0", obj.createJSONObject(200,1));
+			new MyAsyncTask().execute("0", obj.createJSONObject(200,1), new EventDb(this).createJSONArray());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+        
 		obj.insert("MainActivity", "button1");
 		obj.insert("MainActivity", "button2");
+		
         new MyAsyncTask().execute("1");
+        /*
+        Button bt1 = (Button) findViewById(R.id.button1);
+		Button bt2 = (Button) findViewById(R.id.button2);
+		bt1.setText("Download");
+		bt2.setText("Play");
+		*/
     }
     
     @Override
@@ -49,15 +64,31 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void Click1(View v)
+    public void click1(View v)
     {
+    	
+    	try {
+			new Event(this, ab, "main_activity_button1", "orientation", "Clicked");
+		} catch (JSONException e) {                                  
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                             
+    	
     	Intent i = new Intent(this,Resolution.class);
     	obj.updateCount("MainActivity", "button1", ab);
     	startActivity(i);
     }
     
-    public void Click2(View v)
+    public void click2(View v)
     {
+    	
+    	try {
+			new Event(this, ab, "main_activity_button2", "edit_text", "Clicked", t1.getText().toString());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
     	Intent i = new Intent(this,Resolution.class);
     	obj.updateCount("MainActivity", "button2", ab);
     	startActivity(i);
@@ -102,6 +133,7 @@ public class MainActivity extends ActionBarActivity {
 			{
 				if(tObj.sendJSONdata(uris[1]).equals("Data Sent"))
 					obj.delete_all_rows();
+				tObj.sendEventJSONdata(uris[2]);
 				return "DO NOTHING";
 			}
 			else

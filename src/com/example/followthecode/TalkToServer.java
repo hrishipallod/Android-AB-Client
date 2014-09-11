@@ -17,8 +17,9 @@ import android.net.NetworkInfo;
 
 public class TalkToServer {
 
-	public static final String getURL = "http://192.168.1.2/ab_server/get.php";
-	public static final String postURL = "http://192.168.1.2/ab_server/post.php";
+	public static final String getURL   = "http://192.168.1.2/ab_server/get.php";
+	public static final String postURL  = "http://192.168.1.2/ab_server/post.php";
+	public static final String eventURL = "http://192.168.1.2/ab_server/addevents.php";
 	
 	private Context context;
 	public TalkToServer(Context context)
@@ -61,6 +62,35 @@ public class TalkToServer {
 		return "Data sent";
 	 
 	}
+	
+	public String sendEventJSONdata(String jString)
+	{
+		String result;
+		if(checkConnectivity()==false)
+		{
+			return "Could not connect";
+		}
+		
+		try
+		{
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httpPost = new HttpPost(eventURL);
+		    StringEntity se = new StringEntity(jString);
+		    httpPost.setEntity(se);
+	        httpPost.setHeader("Accept", "application/json");
+	        httpPost.setHeader("Content-type", "application/json");
+	        HttpResponse httpResponse = httpclient.execute(httpPost);
+            InputStream inputStream = httpResponse.getEntity().getContent();
+	        result = convertStreamToString(inputStream);
+	    
+		} catch (Exception e) {
+	            //Log.d("InputStream", e.getLocalizedMessage());
+	        	result = "Could not connect";
+	    }
+		return "Data sent";
+	 
+	}
+	
 	public String getAorB()
 	{
 		String str = "0";

@@ -1,3 +1,4 @@
+
 package com.example.followthecode;
 
 import org.json.JSONArray;
@@ -10,24 +11,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class EventTracking  extends SQLiteOpenHelper{
+public class EventDb  extends SQLiteOpenHelper{
 	
-	/*
-	String timestamp;
-	String eventName;
-	String eventValue;
-	String parameterName;
-	String parameterValue;
-	*/
 	
 	public static final int dev_id = 200;
 	public static final int app_id = 1;
 	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_NAME = "local_db";
+	private static final String DATABASE_NAME = "ldb";
 	private static final String TABLE_NAME = "event_stats";
 	private static final String JSTRING = "jstring";
 
-	public EventTracking(Context context) {
+	public EventDb(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -57,23 +51,29 @@ public class EventTracking  extends SQLiteOpenHelper{
 		values.put(JSTRING, jString);
 		db.insert(TABLE_NAME, null, values);
 		db.close();
-	
 	}
-	void createJSONString(String timestamp, String eventName, String eventValue, String parameterName, String parameterValue) throws JSONException
+
+	String createJSONArray() throws JSONException
 	{
 		//Read data
 		//Create JSON object
 		//Send data
 		//Delete table contents
-		JSONObject jObj = new JSONObject();
-		jObj.put("developer_id", 200);
-		jObj.put("app_id", 1);
-		jObj.put("timestamp", timestamp);
-		jObj.put("eventName", eventName);
-		jObj.put("eventValue", eventValue);
-		jObj.put("parameterName", parameterName);
-		jObj.put("parameterValue", parameterValue);
-		
-		addToDB(jObj.toString());
+		//JSONObject jObj = new JSONObject();
+		JSONArray jArray = new JSONArray();
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("SELECT JSTRING FROM " + TABLE_NAME, null);
+		cursor.moveToFirst();
+		if(cursor.moveToFirst())
+		{
+			do
+			{
+				JSONObject temp = new JSONObject(cursor.getString(0));
+				jArray.put(temp);
+			}while(cursor.moveToNext());
+		}
+		//jObj.put("events", jArray);
+		return jArray.toString();
 	}
+	
 }
